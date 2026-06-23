@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "Hvih5Js+3w4=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\rudik\\Documents\\GitHub\\Plant3D-Toolkit\\excel-report-compare-windows\\RKExcelReportCompare.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\rudik\\.nuget\\packages\\exceldna.addin\\1.9.0\\exceldna.addin.1.9.0.nupkg.sha512",
+    "C:\\Users\\rudik\\.nuget\\packages\\exceldna.integration\\1.9.0\\exceldna.integration.1.9.0.nupkg.sha512",
+    "C:\\Users\\rudik\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.3\\microsoft.netframework.referenceassemblies.1.0.3.nupkg.sha512",
+    "C:\\Users\\rudik\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net48\\1.0.3\\microsoft.netframework.referenceassemblies.net48.1.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

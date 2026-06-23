@@ -1,0 +1,63 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\rudik\\Documents\\GitHub\\Plant3D-Toolkit\\excel-report-compare-windows\\RKExcelReportCompare.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\rudik\\Documents\\GitHub\\Plant3D-Toolkit\\excel-report-compare-windows\\RKExcelReportCompare.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\rudik\\Documents\\GitHub\\Plant3D-Toolkit\\excel-report-compare-windows\\RKExcelReportCompare.csproj",
+        "projectName": "RKExcelReportCompare",
+        "projectPath": "C:\\Users\\rudik\\Documents\\GitHub\\Plant3D-Toolkit\\excel-report-compare-windows\\RKExcelReportCompare.csproj",
+        "packagesPath": "C:\\Users\\rudik\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\rudik\\Documents\\GitHub\\Plant3D-Toolkit\\excel-report-compare-windows\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\rudik\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net48"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net48": {
+            "targetAlias": "net48",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net48": {
+          "targetAlias": "net48",
+          "dependencies": {
+            "ExcelDna.AddIn": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.9.0, )"
+            },
+            "Microsoft.NETFramework.ReferenceAssemblies": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.422\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
