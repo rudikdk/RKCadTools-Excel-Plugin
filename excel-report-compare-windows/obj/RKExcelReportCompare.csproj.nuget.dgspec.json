@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\rudik\\Documents\\GitHub\\Plant3D-Toolkit\\excel-report-compare-windows\\RKExcelReportCompare.csproj": {}
+    "C:\\Users\\rudik\\Documents\\GitHub\\RKCadTools Excel Plugin\\excel-report-compare-windows\\RKExcelReportCompare.csproj": {}
   },
   "projects": {
-    "C:\\Users\\rudik\\Documents\\GitHub\\Plant3D-Toolkit\\excel-report-compare-windows\\RKExcelReportCompare.csproj": {
+    "C:\\Users\\rudik\\Documents\\GitHub\\RKCadTools Excel Plugin\\excel-report-compare-windows\\RKExcelReportCompare.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\rudik\\Documents\\GitHub\\Plant3D-Toolkit\\excel-report-compare-windows\\RKExcelReportCompare.csproj",
+        "projectUniqueName": "C:\\Users\\rudik\\Documents\\GitHub\\RKCadTools Excel Plugin\\excel-report-compare-windows\\RKExcelReportCompare.csproj",
         "projectName": "RKExcelReportCompare",
-        "projectPath": "C:\\Users\\rudik\\Documents\\GitHub\\Plant3D-Toolkit\\excel-report-compare-windows\\RKExcelReportCompare.csproj",
+        "projectPath": "C:\\Users\\rudik\\Documents\\GitHub\\RKCadTools Excel Plugin\\excel-report-compare-windows\\RKExcelReportCompare.csproj",
         "packagesPath": "C:\\Users\\rudik\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\rudik\\Documents\\GitHub\\Plant3D-Toolkit\\excel-report-compare-windows\\obj\\",
+        "outputPath": "C:\\Users\\rudik\\Documents\\GitHub\\RKCadTools Excel Plugin\\excel-report-compare-windows\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\rudik\\AppData\\Roaming\\NuGet\\NuGet.Config"

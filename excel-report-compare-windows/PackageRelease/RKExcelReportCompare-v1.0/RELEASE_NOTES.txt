@@ -1,0 +1,32 @@
+RK Excel Report Compare
+Release Notes
+Version 1.0
+
+Release Summary
+---------------
+Initial commercial release package for the Windows Excel add-in.
+
+Included Functionality
+----------------------
+- Adds an RK Compare ribbon tab in Microsoft Excel.
+- Compares two open Excel report workbooks.
+- Supports row matching by key header, such as Tag or another unique identifier.
+- Supports cell-by-cell comparison by position.
+- Creates a separate RK Compare worksheet in the selected new workbook.
+- Marks added rows/cells, changed rows/cells, and removed rows/cells with clear status colors.
+- Includes an About button showing version, author, and support contact.
+- Includes a browser-readable USER_GUIDE.html.
+
+Version Information
+-------------------
+Product: RK Excel Report Compare
+Version: 1.0
+Author: Rudi Kaergaard
+Contact: contact@rkcadtools.com
+
+Known Notes
+-----------
+- This add-in is for Microsoft Excel desktop on Windows.
+- Use RKExcelReportCompare64-packed.xll for 64-bit Excel.
+- Use RKExcelReportCompare-packed.xll for 32-bit Excel.
+- The generated RK Compare worksheet is created in the selected new workbook.

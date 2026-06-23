@@ -23,6 +23,13 @@ public sealed class ReportCompareRibbon : ExcelRibbon
                              screentip="Compare open Excel report workbooks"
                              supertip="Choose two open workbooks and write differences to a separate RK Compare sheet."
                              onAction="CompareReports"/>
+                     <button id="rkAboutButton"
+                             label="About"
+                             size="large"
+                             getImage="GetButtonImage"
+                             screentip="About RK Excel Report Compare"
+                             supertip="Show version, author, and contact information."
+                             onAction="ShowAbout"/>
                    </group>
                  </tab>
                </tabs>
@@ -31,7 +38,9 @@ public sealed class ReportCompareRibbon : ExcelRibbon
            """;
 
     public Bitmap GetButtonImage(IRibbonControl control)
-        => ReportCompareIcon.CreateBitmap(32);
+        => control.Id == "rkAboutButton"
+            ? ReportCompareIcon.CreateAboutBitmap(32)
+            : ReportCompareIcon.CreateBitmap(32);
 
     public void CompareReports(IRibbonControl control)
     {
@@ -51,6 +60,17 @@ public sealed class ReportCompareRibbon : ExcelRibbon
         }
     }
 
+    public void ShowAbout(IRibbonControl control)
+    {
+        System.Windows.Forms.MessageBox.Show(
+            "RK Excel Report Compare" + Environment.NewLine +
+            "Version 1.0" + Environment.NewLine + Environment.NewLine +
+            "Made by Rudi K\u00e6rgaard" + Environment.NewLine +
+            "Contact: contact@rkcadtools.com",
+            "About RK Excel Report Compare",
+            System.Windows.Forms.MessageBoxButtons.OK,
+            System.Windows.Forms.MessageBoxIcon.Information);
+    }
 }
 
 internal static class ReportCompareIcon
@@ -82,6 +102,27 @@ internal static class ReportCompareIcon
         graphics.DrawLine(linePen, 17 * scale, 26 * scale, 20 * scale, 23 * scale);
 
         graphics.DrawString("RK", textFont, textBrush, new PointF(9.5f * scale, 2.5f * scale));
+        return bitmap;
+    }
+
+    public static Bitmap CreateAboutBitmap(int size)
+    {
+        var bitmap = new Bitmap(size, size);
+        using var graphics = Graphics.FromImage(bitmap);
+        graphics.SmoothingMode = SmoothingMode.AntiAlias;
+        graphics.Clear(Color.Transparent);
+
+        float scale = size / 32f;
+        using var backBrush = new SolidBrush(Color.FromArgb(15, 118, 110));
+        using var ringBrush = new SolidBrush(Color.FromArgb(217, 234, 247));
+        using var textBrush = new SolidBrush(Color.FromArgb(31, 41, 51));
+        using var dotBrush = new SolidBrush(Color.White);
+        using var textFont = new Font("Segoe UI", 17f * scale, FontStyle.Bold, GraphicsUnit.Pixel);
+
+        graphics.FillRoundedRectangle(backBrush, ScaleRect(2, 2, 28, 28, scale), 6 * scale);
+        graphics.FillEllipse(ringBrush, ScaleRect(9, 7, 14, 18, scale));
+        graphics.FillEllipse(dotBrush, ScaleRect(14.1f, 10, 3.8f, 3.8f, scale));
+        graphics.DrawString("i", textFont, textBrush, new PointF(13.1f * scale, 12.2f * scale));
         return bitmap;
     }
 

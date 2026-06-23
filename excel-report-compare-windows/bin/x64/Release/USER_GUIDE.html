@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RK Excel Report Compare - User Guide</title>
+  <style>
+    :root {
+      --ink: #1f2933;
+      --muted: #52606d;
+      --line: #d9e2ec;
+      --soft: #f5f7fa;
+      --panel: #ffffff;
+      --primary: #0f766e;
+      --primary-dark: #0b5f59;
+      --blue-soft: #d9eaf7;
+      --green-soft: #e5f7eb;
+      --yellow-soft: #fff4d6;
+      --red-soft: #fde2e2;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--soft);
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    a {
+      color: var(--primary-dark);
+    }
+
+    .hero {
+      background: #0f766e;
+      color: #ffffff;
+      padding: 42px 24px 34px;
+    }
+
+    .hero-inner,
+    main {
+      width: min(1040px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 16px 0 0;
+      font-size: 1.12rem;
+      color: #e6fffb;
+    }
+
+    main {
+      padding: 28px 0 44px;
+    }
+
+    section {
+      margin: 0 0 22px;
+      padding: 24px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 20px 0 8px;
+      font-size: 1.08rem;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    ul,
+    ol {
+      margin: 8px 0 0;
+      padding-left: 1.4rem;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    code {
+      padding: 0.08rem 0.28rem;
+      border-radius: 4px;
+      background: #eef2f7;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+
+    pre {
+      overflow-x: auto;
+      margin: 12px 0 0;
+      padding: 14px;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    pre code {
+      padding: 0;
+      background: transparent;
+      color: inherit;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 0.95rem;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--blue-soft);
+    }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .quick-card {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+    }
+
+    .quick-card strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .note {
+      padding: 14px;
+      border-left: 4px solid var(--primary);
+      background: #ecfdf5;
+      border-radius: 6px;
+    }
+
+    .status-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .status {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+
+    .added {
+      background: var(--green-soft);
+    }
+
+    .changed {
+      background: var(--yellow-soft);
+    }
+
+    .removed {
+      background: var(--red-soft);
+    }
+
+    .footer {
+      color: var(--muted);
+      font-size: 0.92rem;
+      text-align: center;
+      padding: 8px 0 0;
+    }
+
+    @media (max-width: 760px) {
+      .quick-grid,
+      .status-list {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 18px;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .hero {
+        background: #ffffff;
+        color: var(--ink);
+        border-bottom: 2px solid var(--line);
+      }
+
+      .hero p {
+        color: var(--muted);
+      }
+
+      section {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">User guide</p>
+      <h1>RK Excel Report Compare</h1>
+      <p>Install the Excel add-in, compare an old report with a new report, and create a clear difference sheet without marking up your original worksheets.</p>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <h2>What This Plugin Does</h2>
+      <p>RK Excel Report Compare adds an <code>RK Compare</code> tab to Microsoft Excel. The add-in compares two open workbooks and writes the result to a separate worksheet named <code>RK Compare</code> in the selected new workbook.</p>
+      <div class="quick-grid">
+        <div class="quick-card">
+          <strong>Old report</strong>
+          The baseline workbook and worksheet you want to compare from.
+        </div>
+        <div class="quick-card">
+          <strong>New report</strong>
+          The workbook and worksheet that should receive the generated comparison sheet.
+        </div>
+        <div class="quick-card">
+          <strong>RK Compare</strong>
+          The generated result worksheet with statuses, colors, and difference details.
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Before You Install</h2>
+      <ul>
+        <li>Use Microsoft Excel desktop on Windows.</li>
+        <li>Use <code>RKExcelReportCompare64-packed.xll</code> for 64-bit Excel.</li>
+        <li>Use <code>RKExcelReportCompare-packed.xll</code> only if your Excel installation is 32-bit.</li>
+        <li>Most modern Microsoft Office installations are 64-bit.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Install the Add-in</h2>
+      <ol>
+        <li>Download or build the packed add-in file.</li>
+        <li>If the file came from the internet, right-click the <code>.xll</code> file in File Explorer, choose <code>Properties</code>, select <code>Unblock</code> if shown, and click <code>OK</code>.</li>
+        <li>Open Excel.</li>
+        <li>Go to <code>File</code> -> <code>Options</code> -> <code>Add-ins</code>.</li>
+        <li>At the bottom of the window, set <code>Manage</code> to <code>Excel Add-ins</code>.</li>
+        <li>Click <code>Go</code>.</li>
+        <li>Click <code>Browse</code> and select the packed <code>.xll</code> file.</li>
+        <li>Confirm the add-in is checked in the add-ins list.</li>
+        <li>Close the dialog. Excel should show a new ribbon tab named <code>RK Compare</code>.</li>
+      </ol>
+      <p class="note">If Excel asks whether to enable the add-in, allow it. The plugin must be enabled before the <code>RK Compare</code> tab can appear.</p>
+    </section>
+
+    <section>
+      <h2>Build the Add-in From Source</h2>
+      <p>Developers can build the packed add-in from this repository folder with:</p>
+      <pre><code>dotnet restore RKExcelReportCompare.csproj
+dotnet build RKExcelReportCompare.csproj -c Release /p:Platform=x64</code></pre>
+      <p>The packed output is created under:</p>
+      <pre><code>bin\x64\Release\net48\publish\</code></pre>
+    </section>
+
+    <section>
+      <h2>Compare Two Reports</h2>
+      <ol>
+        <li>Open the old report workbook in Excel.</li>
+        <li>Open the new report workbook in Excel.</li>
+        <li>Click <code>RK Compare</code> -> <code>Compare Reports</code>.</li>
+        <li>In <code>1. Old report</code>, choose the old workbook and worksheet.</li>
+        <li>In <code>2. New report</code>, choose the new workbook and worksheet.</li>
+        <li>Choose the comparison method.</li>
+        <li>If you use key matching, check the header row number and choose the old and new key headers.</li>
+        <li>Click <code>Create Comparison Sheet</code>.</li>
+      </ol>
+      <p>The plugin creates or replaces the <code>RK Compare</code> worksheet in the selected new workbook.</p>
+    </section>
+
+    <section>
+      <h2>About the Plugin</h2>
+      <p>Click <code>RK Compare</code> -> <code>About</code> to see the plugin information inside Excel.</p>
+      <table>
+        <tbody>
+          <tr>
+            <th>Version</th>
+            <td>1.0</td>
+          </tr>
+          <tr>
+            <th>Made by</th>
+            <td>Rudi Kærgaard</td>
+          </tr>
+          <tr>
+            <th>Contact</th>
+            <td><a href="mailto:contact@rkcadtools.com">contact@rkcadtools.com</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Choose the Right Comparison Method</h2>
+      <h3>Match rows by keys (recommended)</h3>
+      <p>Use this mode when each report row has a stable unique identifier, such as <code>Tag</code>, equipment number, line number, or another item ID. The add-in matches old and new rows by that key, then compares shared headers column by column.</p>
+
+      <h3>Compare cells by position</h3>
+      <p>Use this mode when both sheets have the same layout and you want to compare cell A1 with cell A1, B1 with B1, and so on. This is useful for simple spreadsheets or exports without reliable row keys.</p>
+    </section>
+
+    <section>
+      <h2>Understand the Result Sheet</h2>
+      <p>The generated <code>RK Compare</code> sheet uses statuses and colors to make review faster.</p>
+      <div class="status-list">
+        <div class="status added">
+          <strong>Added</strong>
+          A row or cell exists in the new report but not in the old report.
+        </div>
+        <div class="status changed">
+          <strong>Changed</strong>
+          A matched row or cell exists in both reports, but the value changed.
+        </div>
+        <div class="status removed">
+          <strong>Removed</strong>
+          A row or cell existed in the old report but no longer exists in the new report.
+        </div>
+      </div>
+
+      <h3>Key matching output</h3>
+      <p>The add-in copies the selected new report sheet, inserts a <code>Status</code> column, and marks differences directly in the copied report. Changed cells show values in this format:</p>
+      <pre><code>old value --> new value</code></pre>
+      <p>A <code>Difference details</code> section is written below the copied report with exact old and new values. Removed rows are listed there because they are no longer present in the new report layout.</p>
+
+      <h3>Cell position output</h3>
+      <p>The add-in creates a compact difference table. The table includes these columns:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Column</th>
+            <th>Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Status</code></td>
+            <td><code>Changed</code>, <code>Added</code>, or <code>Removed</code>.</td>
+          </tr>
+          <tr>
+            <td><code>Key</code></td>
+            <td>The matched key value when key matching is used.</td>
+          </tr>
+          <tr>
+            <td><code>Sheet</code></td>
+            <td>The compared worksheet names.</td>
+          </tr>
+          <tr>
+            <td><code>Row</code></td>
+            <td>The changed row number.</td>
+          </tr>
+          <tr>
+            <td><code>Column</code></td>
+            <td>The changed Excel column letter.</td>
+          </tr>
+          <tr>
+            <td><code>Header</code></td>
+            <td>The changed header name when available.</td>
+          </tr>
+          <tr>
+            <td><code>Old Value</code></td>
+            <td>The value from the old report.</td>
+          </tr>
+          <tr>
+            <td><code>New Value</code></td>
+            <td>The value from the new report.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Good Report Setup</h2>
+      <ul>
+        <li>Save or back up important workbooks before running any comparison.</li>
+        <li>Use clear, non-empty headers in the selected header row.</li>
+        <li>For key matching, choose a key column where each item appears only once.</li>
+        <li>Open both reports in the same Excel session before clicking <code>Compare Reports</code>.</li>
+        <li>If you open another workbook after the dialog is already open, click <code>Refresh Workbooks</code>.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Troubleshooting</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>What to Try</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>The <code>RK Compare</code> tab does not appear.</td>
+            <td>Close and reopen Excel, then confirm the add-in is checked under <code>File</code> -> <code>Options</code> -> <code>Add-ins</code>.</td>
+          </tr>
+          <tr>
+            <td>Excel blocks the add-in.</td>
+            <td>Right-click the <code>.xll</code>, open <code>Properties</code>, and click <code>Unblock</code> if shown.</td>
+          </tr>
+          <tr>
+            <td>The workbook list is missing a report.</td>
+            <td>Open both reports in Excel, then click <code>Refresh Workbooks</code> in the compare dialog.</td>
+          </tr>
+          <tr>
+            <td>No key headers are shown.</td>
+            <td>Check that the selected worksheet is correct and that <code>Header row</code> points to the row containing column names.</td>
+          </tr>
+          <tr>
+            <td>The result appears in the wrong workbook.</td>
+            <td>Run the comparison again and make sure the correct workbook is selected under <code>2. New report</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <p class="footer">RK Excel Report Compare - Windows Excel add-in</p>
+  </main>
+</body>
+</html>
