@@ -1,8 +1,8 @@
 # RK Excel Report Compare
 
-RK Excel Report Compare is a Windows Excel add-in for comparing two open Excel report workbooks. It adds an `RK Compare` ribbon tab to desktop Excel and creates a separate `RK Compare` worksheet with the differences, leaving the selected original report sheets unchanged.
+RK Excel Report Compare is an open-source Windows Excel add-in for comparing two open Excel report workbooks. It adds an `RK Compare` ribbon tab to desktop Excel and creates a separate `RK Compare` worksheet with the differences, leaving the selected original report sheets unchanged.
 
-The add-in is built with Excel-DNA and is distributed as a packed `.xll` file. It runs locally inside Excel and does not require a web server, Office.js manifest, browser, or cloud service.
+The add-in is built with Excel-DNA and is distributed as packed `.xll` files. It runs locally inside Excel and does not require a web server, Office.js manifest, browser, or cloud service.
 
 ## Features
 
@@ -14,6 +14,23 @@ The add-in is built with Excel-DNA and is distributed as a packed `.xll` file. I
 - Preserve the old and new source worksheets.
 - Show plugin version, author, and contact information from the ribbon `About` button.
 
+## Repository Structure
+
+```text
+.
+├─ src/                  # Excel-DNA add-in source code
+├─ docs/                 # User guide and project documentation
+├─ scripts/              # Build and release packaging scripts
+├─ .github/workflows/    # GitHub Actions release automation
+├─ README.md             # Project overview
+├─ LICENSE               # MIT open-source license
+├─ CREDITS.md            # Developer and contributor credits
+├─ CHANGELOG.md          # Release history
+└─ RKExcelReportCompare.csproj
+```
+
+Build outputs are intentionally excluded from the repository. Release packages are generated into `dist/` locally or attached to GitHub Releases by the workflow.
+
 ## Requirements
 
 - Windows.
@@ -21,21 +38,24 @@ The add-in is built with Excel-DNA and is distributed as a packed `.xll` file. I
 - .NET Framework 4.8 runtime.
 - 64-bit Excel is recommended. Use the 32-bit packed add-in only if your Excel installation is 32-bit.
 
-## Install From a Release
+## Download From GitHub Releases
 
-1. Download the latest release package from GitHub.
-2. Extract the zip file if the add-in was downloaded as an archive.
-3. Choose the correct packed add-in:
+1. Open the repository's `Releases` page on GitHub.
+2. Download the latest `RKExcelReportCompare-<version>.zip` package.
+3. Extract the zip file.
+4. Choose the correct packed add-in:
    - `RKExcelReportCompare64-packed.xll` for 64-bit Excel.
    - `RKExcelReportCompare-packed.xll` for 32-bit Excel.
-4. If Windows blocks the downloaded file, right-click the `.xll`, choose `Properties`, check `Unblock` if shown, then click `OK`.
-5. Open Excel.
-6. Go to `File` -> `Options` -> `Add-ins`.
-7. At the bottom of the window, set `Manage` to `Excel Add-ins`, then click `Go`.
-8. Click `Browse`, select the `.xll`, and confirm.
-9. Make sure the add-in is checked in the add-ins list.
+5. If Windows blocks the downloaded file, right-click the `.xll`, choose `Properties`, check `Unblock` if shown, then click `OK`.
+6. Open Excel.
+7. Go to `File` -> `Options` -> `Add-ins`.
+8. At the bottom of the window, set `Manage` to `Excel Add-ins`, then click `Go`.
+9. Click `Browse`, select the `.xll`, and confirm.
+10. Make sure the add-in is checked in the add-ins list.
 
 Excel should now show a ribbon tab named `RK Compare` with a `Compare Reports` button.
+
+The HTML user guide is included in every release package as `USER_GUIDE.html`.
 
 ## Build From Source
 
@@ -64,6 +84,35 @@ For 32-bit Excel, load:
 bin\x64\Release\net48\publish\RKExcelReportCompare-packed.xll
 ```
 
+## Create a Release Package Locally
+
+Run:
+
+```powershell
+.\scripts\package-release.ps1 -Version 1.0.0
+```
+
+The script builds the add-in and creates:
+
+```text
+dist\RKExcelReportCompare-v1.0.0.zip
+```
+
+The package contains the packed Excel add-ins, the HTML user guide, license, credits, changelog, third-party notices, release notes, and checksums.
+
+## GitHub Release Automation
+
+The workflow in `.github/workflows/release.yml` can publish release assets automatically.
+
+Create and push a version tag:
+
+```powershell
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+GitHub Actions will build the project, create the release zip, upload it as an artifact, and attach it to a GitHub Release.
+
 ## Basic Use
 
 1. Open the old report workbook in Excel.
@@ -85,9 +134,13 @@ Click `RK Compare` -> `About` to view the plugin version, author, and support co
 
 ```text
 Version 1.0
-Made by Rudi Kærgaard
+Made by Rudi Kaergaard
 Contact: contact@rkcadtools.com
 ```
+
+## User Guide
+
+The full installation and usage guide is available in [docs/USER_GUIDE.html](docs/USER_GUIDE.html). Open it in a browser to view or print it.
 
 ## Comparison Modes
 
@@ -116,6 +169,10 @@ The add-in creates a compact difference table with one row per changed, added, o
 - If key headers are missing, confirm that the correct worksheet and header row number are selected.
 - If the wrong workbook gets the result sheet, reopen the dialog and check the `New report` workbook selection before clicking `Create Comparison Sheet`.
 
-## User Guide
+## Credits
 
-A friendly installation and usage guide is included in [`USER_GUIDE.html`](USER_GUIDE.html). Open it in a browser to view or print it.
+Developer and contributor credits are maintained in [CREDITS.md](CREDITS.md). GitHub will also show commit-based contributors automatically.
+
+## License
+
+This project is released under the [MIT License](LICENSE).

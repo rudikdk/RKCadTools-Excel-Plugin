@@ -1,3 +1,0 @@
-<DnaLibrary Name="RK Excel Report Compare" RuntimeVersion="v4.0">
-  <ExternalLibrary Path="RKExcelReportCompare.dll" ExplicitExports="false" LoadFromBytes="true" Pack="true" />
-</DnaLibrary>
