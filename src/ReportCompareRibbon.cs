@@ -1,6 +1,9 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using ExcelDna.Integration;
 using ExcelDna.Integration.CustomUI;
@@ -23,12 +26,19 @@ public sealed class ReportCompareRibbon : ExcelRibbon
                              screentip="Compare open Excel report workbooks"
                              supertip="Choose two open workbooks and write differences to a separate RK Compare sheet."
                              onAction="CompareReports"/>
+                     <button id="rkUserGuideButton"
+                             label="User Guide"
+                             size="large"
+                             getImage="GetButtonImage"
+                             screentip="Open the RK Excel Report Compare user guide"
+                             supertip="Open the built-in HTML guide with installation, comparison modes, and troubleshooting help."
+                             onAction="ShowUserGuide"/>
                      <button id="rkAboutButton"
                              label="About"
                              size="large"
                              getImage="GetButtonImage"
                              screentip="About RK Excel Report Compare"
-                             supertip="Show version, author, and contact information."
+                             supertip="Show version, project information, contact details, and the GitHub repository."
                              onAction="ShowAbout"/>
                    </group>
                  </tab>
@@ -38,9 +48,12 @@ public sealed class ReportCompareRibbon : ExcelRibbon
            """;
 
     public Bitmap GetButtonImage(IRibbonControl control)
-        => control.Id == "rkAboutButton"
-            ? ReportCompareIcon.CreateAboutBitmap(32)
-            : ReportCompareIcon.CreateBitmap(32);
+        => control.Id switch
+        {
+            "rkAboutButton" => ReportCompareIcon.CreateAboutBitmap(32),
+            "rkUserGuideButton" => ReportCompareIcon.CreateGuideBitmap(32),
+            _ => ReportCompareIcon.CreateBitmap(32)
+        };
 
     public void CompareReports(IRibbonControl control)
     {
@@ -62,14 +75,254 @@ public sealed class ReportCompareRibbon : ExcelRibbon
 
     public void ShowAbout(IRibbonControl control)
     {
-        System.Windows.Forms.MessageBox.Show(
-            "RK Excel Report Compare" + Environment.NewLine +
-            "Version 1.0" + Environment.NewLine + Environment.NewLine +
-            "Made by Rudi K\u00e6rgaard" + Environment.NewLine +
-            "Contact: contact@rkcadtools.com",
-            "About RK Excel Report Compare",
-            System.Windows.Forms.MessageBoxButtons.OK,
-            System.Windows.Forms.MessageBoxIcon.Information);
+        using var dialog = new AboutDialog();
+        dialog.ShowDialog();
+    }
+
+    public void ShowUserGuide(IRibbonControl control)
+    {
+        UserGuideLauncher.Open();
+    }
+}
+
+internal static class UserGuideLauncher
+{
+    private const string ResourceName = "RKExcelReportCompare.USER_GUIDE.html";
+    private const string GuideFileName = "USER_GUIDE.html";
+    private const string OnlineGuideUrl = "https://github.com/rudikdk/RKCadTools-Excel-Plugin/blob/main/docs/USER_GUIDE.html";
+
+    public static void Open()
+    {
+        try
+        {
+            string guidePath = ExtractGuide();
+            Process.Start(new ProcessStartInfo(guidePath) { UseShellExecute = true });
+        }
+        catch (Exception ex)
+        {
+            var result = System.Windows.Forms.MessageBox.Show(
+                "The built-in user guide could not be opened." + Environment.NewLine +
+                "Open the online guide on GitHub instead?" + Environment.NewLine + Environment.NewLine +
+                ex.Message,
+                "RK Excel Report Compare",
+                System.Windows.Forms.MessageBoxButtons.YesNo,
+                System.Windows.Forms.MessageBoxIcon.Warning);
+
+            if (result == System.Windows.Forms.DialogResult.Yes)
+                OpenOnlineGuide();
+        }
+    }
+
+    private static string ExtractGuide()
+    {
+        string directory = Path.Combine(Path.GetTempPath(), "RKExcelReportCompare");
+        Directory.CreateDirectory(directory);
+
+        string guidePath = Path.Combine(directory, GuideFileName);
+        using Stream? resource = Assembly.GetExecutingAssembly().GetManifestResourceStream(ResourceName);
+        if (resource is null)
+            throw new InvalidOperationException("The embedded user guide was not found in the add-in.");
+
+        using var output = File.Create(guidePath);
+        resource.CopyTo(output);
+        return guidePath;
+    }
+
+    private static void OpenOnlineGuide()
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo(OnlineGuideUrl) { UseShellExecute = true });
+        }
+        catch (Exception ex)
+        {
+            System.Windows.Forms.MessageBox.Show(
+                "Could not open the online user guide." + Environment.NewLine + Environment.NewLine + ex.Message,
+                "RK Excel Report Compare",
+                System.Windows.Forms.MessageBoxButtons.OK,
+                System.Windows.Forms.MessageBoxIcon.Warning);
+        }
+    }
+}
+
+internal sealed class AboutDialog : System.Windows.Forms.Form
+{
+    private const string GitHubUrl = "https://github.com/rudikdk/RKCadTools-Excel-Plugin";
+
+    public AboutDialog()
+    {
+        Text = "About RK Excel Report Compare";
+        StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+        FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+        MaximizeBox = false;
+        MinimizeBox = false;
+        ShowInTaskbar = false;
+        ClientSize = new Size(520, 330);
+        Font = new Font("Segoe UI", 9F);
+        BackColor = Color.FromArgb(245, 247, 250);
+        Icon = ReportCompareIcon.CreateIcon(32);
+
+        BuildLayout();
+    }
+
+    private void BuildLayout()
+    {
+        var root = new System.Windows.Forms.TableLayoutPanel
+        {
+            Dock = System.Windows.Forms.DockStyle.Fill,
+            ColumnCount = 1,
+            RowCount = 3,
+            Padding = new System.Windows.Forms.Padding(20),
+            BackColor = BackColor
+        };
+        root.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+        root.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100));
+        root.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+        Controls.Add(root);
+
+        root.Controls.Add(BuildHeader(), 0, 0);
+        root.Controls.Add(BuildContent(), 0, 1);
+        root.Controls.Add(BuildFooter(), 0, 2);
+    }
+
+    private System.Windows.Forms.Control BuildHeader()
+    {
+        var header = new System.Windows.Forms.TableLayoutPanel
+        {
+            Dock = System.Windows.Forms.DockStyle.Top,
+            AutoSize = true,
+            ColumnCount = 2,
+            Margin = new System.Windows.Forms.Padding(0, 0, 0, 16),
+            BackColor = BackColor
+        };
+        header.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 48));
+        header.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100));
+
+        var icon = new System.Windows.Forms.PictureBox
+        {
+            Image = ReportCompareIcon.CreateBitmap(40),
+            SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage,
+            Dock = System.Windows.Forms.DockStyle.Fill,
+            Margin = new System.Windows.Forms.Padding(0, 2, 12, 0)
+        };
+        header.Controls.Add(icon, 0, 0);
+
+        var titleBlock = new System.Windows.Forms.TableLayoutPanel
+        {
+            Dock = System.Windows.Forms.DockStyle.Top,
+            AutoSize = true,
+            ColumnCount = 1,
+            BackColor = BackColor
+        };
+        titleBlock.Controls.Add(new System.Windows.Forms.Label
+        {
+            Text = "RK Excel Report Compare",
+            AutoSize = true,
+            Font = new Font(Font.FontFamily, 15F, FontStyle.Bold),
+            ForeColor = Color.FromArgb(31, 41, 51),
+            Margin = new System.Windows.Forms.Padding(0, 0, 0, 2)
+        });
+        titleBlock.Controls.Add(new System.Windows.Forms.Label
+        {
+            Text = "Version 1.0",
+            AutoSize = true,
+            ForeColor = Color.FromArgb(91, 105, 123),
+            Margin = new System.Windows.Forms.Padding(0)
+        });
+        header.Controls.Add(titleBlock, 1, 0);
+
+        return header;
+    }
+
+    private System.Windows.Forms.Control BuildContent()
+    {
+        var content = new System.Windows.Forms.TableLayoutPanel
+        {
+            Dock = System.Windows.Forms.DockStyle.Fill,
+            AutoSize = true,
+            ColumnCount = 1,
+            BackColor = BackColor
+        };
+
+        content.Controls.Add(new System.Windows.Forms.Label
+        {
+            Text = "A lightweight Excel-DNA add-in for comparing two open Excel report workbooks. It can match rows by key headers or compare cells by position, then writes the differences to a separate RK Compare worksheet while keeping the original reports unchanged.",
+            AutoSize = false,
+            Height = 72,
+            Dock = System.Windows.Forms.DockStyle.Top,
+            ForeColor = Color.FromArgb(31, 41, 51),
+            Margin = new System.Windows.Forms.Padding(0, 0, 0, 12)
+        });
+
+        content.Controls.Add(new System.Windows.Forms.Label
+        {
+            Text = "Made by Rudi Kaergaard",
+            AutoSize = true,
+            ForeColor = Color.FromArgb(31, 41, 51),
+            Margin = new System.Windows.Forms.Padding(0, 0, 0, 4)
+        });
+
+        content.Controls.Add(new System.Windows.Forms.Label
+        {
+            Text = "Contact: contact@rkcadtools.com",
+            AutoSize = true,
+            ForeColor = Color.FromArgb(31, 41, 51),
+            Margin = new System.Windows.Forms.Padding(0, 0, 0, 12)
+        });
+
+        var link = new System.Windows.Forms.LinkLabel
+        {
+            Text = "GitHub: " + GitHubUrl,
+            AutoSize = true,
+            LinkColor = Color.FromArgb(15, 118, 110),
+            ActiveLinkColor = Color.FromArgb(12, 91, 84),
+            VisitedLinkColor = Color.FromArgb(15, 118, 110),
+            Margin = new System.Windows.Forms.Padding(0)
+        };
+        link.Links.Add("GitHub: ".Length, GitHubUrl.Length, GitHubUrl);
+        link.LinkClicked += (_, e) =>
+        {
+            if (e.Link.LinkData is string url)
+                OpenUrl(url);
+        };
+        content.Controls.Add(link);
+
+        return content;
+    }
+
+    private System.Windows.Forms.Control BuildFooter()
+    {
+        var closeButton = new System.Windows.Forms.Button
+        {
+            Text = "Close",
+            DialogResult = System.Windows.Forms.DialogResult.OK,
+            Anchor = System.Windows.Forms.AnchorStyles.Right,
+            Width = 92,
+            Height = 34,
+            BackColor = Color.White,
+            ForeColor = Color.FromArgb(31, 41, 51),
+            FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        };
+        closeButton.FlatAppearance.BorderColor = Color.FromArgb(214, 221, 230);
+        AcceptButton = closeButton;
+        CancelButton = closeButton;
+        return closeButton;
+    }
+
+    private static void OpenUrl(string url)
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+        }
+        catch (Exception ex)
+        {
+            System.Windows.Forms.MessageBox.Show(
+                "Could not open the GitHub repository." + Environment.NewLine + Environment.NewLine + ex.Message,
+                "RK Excel Report Compare",
+                System.Windows.Forms.MessageBoxButtons.OK,
+                System.Windows.Forms.MessageBoxIcon.Warning);
+        }
     }
 }
 
@@ -123,6 +376,34 @@ internal static class ReportCompareIcon
         graphics.FillEllipse(ringBrush, ScaleRect(9, 7, 14, 18, scale));
         graphics.FillEllipse(dotBrush, ScaleRect(14.1f, 10, 3.8f, 3.8f, scale));
         graphics.DrawString("i", textFont, textBrush, new PointF(13.1f * scale, 12.2f * scale));
+        return bitmap;
+    }
+
+    public static Bitmap CreateGuideBitmap(int size)
+    {
+        var bitmap = new Bitmap(size, size);
+        using var graphics = Graphics.FromImage(bitmap);
+        graphics.SmoothingMode = SmoothingMode.AntiAlias;
+        graphics.Clear(Color.Transparent);
+
+        float scale = size / 32f;
+        using var backBrush = new SolidBrush(Color.FromArgb(15, 118, 110));
+        using var pageBrush = new SolidBrush(Color.White);
+        using var foldBrush = new SolidBrush(Color.FromArgb(217, 234, 247));
+        using var linePen = new Pen(Color.FromArgb(31, 41, 51), 1.2f * scale) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+        using var accentPen = new Pen(Color.FromArgb(15, 118, 110), 1.5f * scale) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+
+        graphics.FillRoundedRectangle(backBrush, ScaleRect(2, 2, 28, 28, scale), 6 * scale);
+        graphics.FillRoundedRectangle(pageBrush, ScaleRect(9, 6, 14, 20, scale), 2 * scale);
+        graphics.FillPolygon(foldBrush, new[]
+        {
+            new PointF(18 * scale, 6 * scale),
+            new PointF(23 * scale, 11 * scale),
+            new PointF(18 * scale, 11 * scale)
+        });
+        graphics.DrawLine(accentPen, 12 * scale, 14 * scale, 20 * scale, 14 * scale);
+        graphics.DrawLine(linePen, 12 * scale, 18 * scale, 20 * scale, 18 * scale);
+        graphics.DrawLine(linePen, 12 * scale, 22 * scale, 17 * scale, 22 * scale);
         return bitmap;
     }
 

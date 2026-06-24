@@ -12,6 +12,7 @@ The format is based on Keep a Changelog, and this project uses semantic versioni
 - MIT license.
 - Developer credits.
 - HTML user guide under `docs/`.
+- Built-in `User Guide` ribbon button that opens the embedded HTML guide.
 - Local release packaging script.
 - GitHub Actions workflow for tagged releases.
 - Excel-DNA packed add-in release package support.

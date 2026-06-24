@@ -142,6 +142,8 @@ Contact: contact@rkcadtools.com
 
 The full installation and usage guide is available in [docs/USER_GUIDE.html](docs/USER_GUIDE.html). Open it in a browser to view or print it.
 
+The add-in also includes a `User Guide` button in the `RK Compare` ribbon tab. The guide is embedded in the packed `.xll` and opens locally in the default browser.
+
 ## Comparison Modes
 
 ### Match Rows by Keys
